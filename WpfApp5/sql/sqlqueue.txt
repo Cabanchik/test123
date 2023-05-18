@@ -1,0 +1,20 @@
+--Названия на английском потому что я перестанавливал ssms и перестал работать поиск по рус символам
+--1.	Вывести менеджеров у которых имеется номер телефона
+select * from Managers where phone IS NOT NULL
+--2.	Вывести кол-во продаж за 20 июня 2021
+select * from Sells where date = '2021-08-22'
+--3.	Вывести среднюю сумму продажи с товаром 'Фанера'
+select avg(sum) from Sells where name = 'Fanera'
+--4.	Вывести фамилии менеджеров и общую сумму продаж для каждого с товаром 'ОСБ' 
+select m.surname, sum(s.sum) as summ, p.name from
+Sells s join Managers m on m.id = s.manager_id join Products p on s.product_id = p.id where p.name = 'OCB' group by m.surname, p.name
+--5.	Вывести менеджера и товар, который продали 22 августа 2021
+select m.surname + m.name + m.[middle name] as fio, p.name, s.date from
+Sells s join Managers m on m.id = s.manager_id join Products p
+on s.product_id = p.id where s.date = '2021-08-22' group by p.name, m.surname + m.name + m.[middle name], s.date
+--6.Вывести все товары, у которых в названии имеется 'Фанера' и цена не ниже 1750
+select * from Products s where s.cost > 1750 and s.name like '%Fanera%'
+--7.	Вывести историю продаж товаров, группируя по месяцу продажи и наименованию товара
+select p.name, s.date, s.count, p.cost from sells s join Products p on s.product_id = p.id group by MONTH(s.date), p.name, s.date, s.count, p.cost
+--8.	Вывести количество повторяющихся значений и сами значения из таблицы 'Товары', где количество повторений больше 1. 
+select p.name, count(p.name) from Products p group by p.name having count(p.name) >1 
